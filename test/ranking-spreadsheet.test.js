@@ -13,4 +13,9 @@ test('converte os rankings prontos das abas de vendedores e regioes', () => {
   assert.equal(ranking.teams[0].leader, 'Alessandro');
   assert.equal(ranking.teams[0].tons, 27.15118);
   assert.equal(ranking.teams[0].attainment, 13.6);
+  assert.equal(ranking.goalSummary.soldTons, 27.15118);
+  assert.equal(ranking.goalSummary.targetTons, 200.174);
+  assert.equal(ranking.goalSummary.attainment, 13.6);
+  assert.equal(ranking.goalSummary.challengeTargetTons15, 230.2001);
+  assert.equal(ranking.goalSummary.challengeTargetTons30, 260.2262);
 });

@@ -19,7 +19,7 @@ body{font-size:16px;line-height:1.55}
 .section-heading>p{font-size:15px;line-height:1.7;margin:8px 0 0}
 .grid{grid-template-columns:repeat(12,minmax(0,1fr));gap:22px}
 .card{grid-column:span 6;min-width:0;padding:30px;border-radius:16px;box-shadow:0 8px 28px rgba(20,39,88,.06)}
-.card:has(.ranking-table),.card:has(.call-flow),.card:has(.steps){grid-column:1/-1}
+.card:has(.ranking-table),.card:has(.goal-summary),.card:has(.call-flow),.card:has(.steps){grid-column:1/-1}
 .card h2{max-width:82%;margin:0 0 18px;color:var(--deep);font-size:21px;line-height:1.25;letter-spacing:-.015em}
 .card h3{font-size:16px;line-height:1.35}
 .card p,.card li{font-size:14px;line-height:1.75}.card ul,.card ol{padding-left:22px}.card li+li{margin-top:8px}

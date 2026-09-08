@@ -87,6 +87,22 @@ function teamRankingFromCsv(text) {
   })).filter(item => item.name && item.tons != null && item.targetTons != null && item.attainment != null);
 }
 
+function sum(items, key) {
+  return items.reduce((total, item) => Number.isFinite(Number(item[key])) ? total + Number(item[key]) : total, 0);
+}
+
+function goalSummaryFromTeams(teams) {
+  const soldTons = sum(teams, 'tons');
+  const targetTons = sum(teams, 'targetTons');
+  return {
+    soldTons: Number(soldTons.toFixed(6)),
+    targetTons: Number(targetTons.toFixed(6)),
+    attainment: targetTons > 0 ? Number(((soldTons / targetTons) * 100).toFixed(1)) : null,
+    challengeTargetTons15: Number((targetTons * 1.15).toFixed(6)),
+    challengeTargetTons30: Number((targetTons * 1.3).toFixed(6))
+  };
+}
+
 function rankingFromSpreadsheetCsv(sellerText, teamText) {
   const sellers = sellerRankingFromCsv(sellerText);
   const teams = teamRankingFromCsv(teamText);
@@ -95,6 +111,7 @@ function rankingFromSpreadsheetCsv(sellerText, teamText) {
     updatedAt: new Date().toISOString(),
     period: 'Período atual',
     management: { generalManager: 'Marcelo', salesManager: 'Anderson', salesSupervisor: 'Rafael Pereira' },
+    goalSummary: goalSummaryFromTeams(teams),
     teams,
     sellers,
     source: 'spreadsheet'
