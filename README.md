@@ -13,25 +13,28 @@ Aplicação web interna do Grupo ABR para apoio comercial, comunicação interna
 
 ## Arquitetura
 
-- `server.js` centraliza o servidor HTTP, a API e o roteamento da SPA.
-- `admin-server.js` concentra permissões e endpoints administrativos.
-- `public/` contém a SPA e as extensões de interface.
-- `scripts/` contém build e automações de e-mail.
-- `data/ranking.json` serve como fallback local do ranking.
-- `dist/` é a saída do build para deploy.
+- `frontend/public/` contém a SPA e as extensões de interface.
+- `frontend/assets/` contém assets usados pela interface.
+- `backend/server.js` centraliza o servidor HTTP, a API e o roteamento da SPA.
+- `backend/admin-server.js` concentra permissões e endpoints administrativos.
+- `backend/scripts/` contém o build e as automações de e-mail.
+- `backend/data/ranking.json` serve como fallback local do ranking.
+- `backend/test/` contém os testes automatizados.
+- `backend/dist/` é a saída do build para deploy.
+- `docs/reference-materials/` guarda documentos e capturas de referência que não fazem parte da aplicação.
 
 ## Como executar
 
 Requer Node.js 20+.
 
 ```bash
-node server.js
+node backend/server.js
 ```
 
 Se preferir desenvolvimento com watch:
 
 ```bash
-node --watch server.js
+node --watch backend/server.js
 ```
 
 A aplicação sobe em `http://localhost:3000` por padrão.
@@ -40,18 +43,18 @@ A aplicação sobe em `http://localhost:3000` por padrão.
 
 ```bash
 node --test
-node --check server.js
-node --check public/app.js
-node --check public/auth-extension.js
-node --check public/admin-extension.js
-node --check scripts/send-celebrations.js
+node --check backend/server.js
+node --check frontend/public/app.js
+node --check frontend/public/auth-extension.js
+node --check frontend/public/admin-extension.js
+node --check backend/scripts/send-celebrations.js
 ```
 
 ## Ranking
 
 O comportamento do ranking é controlado por `SALES_DATA_MODE`:
 
-- `mock`: lê `data/ranking.json`.
+- `mock`: lê `backend/data/ranking.json`.
 - `manual`: aceita `POST /api/ranking/manual` com `Authorization: Bearer <ADMIN_TOKEN>`.
 - `api`: consulta `SALES_DATA_URL` e converte CSV ou JSON em contrato interno.
 
@@ -78,7 +81,7 @@ O contrato esperado inclui:
 
 ## Deploy no Render
 
-- O build copia os arquivos públicos para `dist/`.
+- O build copia os arquivos públicos para `backend/dist/`.
 - O servidor responde na porta `PORT`.
 - O healthcheck é `/api/health`.
 - As variáveis sensíveis são configuradas no Render como secrets.

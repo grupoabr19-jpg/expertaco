@@ -9,7 +9,8 @@ const { rankingFromSpreadsheetCsv } = require('./ranking-spreadsheet');
 const { rankingFromXlsx } = require('./ranking-import');
 
 const root = __dirname;
-const publicDir = fs.existsSync(path.join(root, 'dist')) ? path.join(root, 'dist') : path.join(root, 'public');
+const projectRoot = path.resolve(root, '..');
+const publicDir = fs.existsSync(path.join(root, 'dist')) ? path.join(root, 'dist') : path.join(projectRoot, 'frontend', 'public');
 const rankingFile = path.join(root, 'data', 'ranking.json');
 const port = Number(process.env.PORT || 3000);
 const mode = ['mock', 'manual', 'api'].includes(process.env.SALES_DATA_MODE) ? process.env.SALES_DATA_MODE : 'mock';
@@ -219,7 +220,7 @@ function serveFile(req, res) {
   const requested = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   if (requested === '/expertaço.png') {
     res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=3600' });
-    return fs.createReadStream(path.join(root, 'expertaço.png')).pipe(res);
+    return fs.createReadStream(path.join(projectRoot, 'frontend', 'assets', 'expertaço.png')).pipe(res);
   }
   const relative = requested === '/' ? 'index.html' : requested.replace(/^\/+/, '');
   const candidate = path.resolve(publicDir, relative);

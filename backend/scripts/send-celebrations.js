@@ -114,7 +114,7 @@ async function sendCelebrationTest({recipient,userId,type='birthday'}){
  const user=process.env.IDEAACO_EMAIL_USER,pass=String(process.env.IDEAACO_EMAIL_APP_PASSWORD||'').replace(/\s+/g,'');if(!process.env.DATABASE_URL||!user||!pass)throw new Error('Configuração de e-mail indisponível.');
  const pool=new Pool({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false},max:2});
  try{
-  await ensureImageColumns(pool);const year=currentYear(),logo=path.join(__dirname,'..','expertaço.png');
+  await ensureImageColumns(pool);const year=currentYear(),logo=path.resolve(__dirname,'..','..','frontend','assets','expertaço.png');
   const person=(await pool.query(`SELECT user_id,email,display_name,photo_data,photo_mime,CASE WHEN hire_date IS NULL THEN 0 ELSE EXTRACT(YEAR FROM age((now() AT TIME ZONE 'America/Sao_Paulo')::date,hire_date))::int END years FROM public.user_profiles WHERE user_id=$1 AND active=true`,[userId])).rows[0];
   if(!person)throw new Error('Perfil de teste não encontrado.');
   const template=(await pool.query('SELECT event_type,subject_template,headline,message_html,image_base,image_mime,photo_x_pct,photo_y_pct,photo_size_pct FROM public.celebration_email_templates WHERE event_type=$1 AND template_year=$2 AND active=true',[type,year])).rows[0];
@@ -130,7 +130,7 @@ async function sendCelebrations(){
  const pool=new Pool({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false},max:2});
  try{
   await ensureImageColumns(pool);
-  const year=currentYear(),logo=path.join(__dirname,'..','expertaço.png');
+  const year=currentYear(),logo=path.resolve(__dirname,'..','..','frontend','assets','expertaço.png');
   const people=(await pool.query(`SELECT user_id,email,display_name,photo_data,photo_mime,birth_date,hire_date,(birth_date IS NOT NULL AND to_char(birth_date,'MM-DD')=to_char(now() AT TIME ZONE 'America/Sao_Paulo','MM-DD')) is_birthday,(hire_date IS NOT NULL AND hire_date<(now() AT TIME ZONE 'America/Sao_Paulo')::date AND to_char(hire_date,'MM-DD')=to_char(now() AT TIME ZONE 'America/Sao_Paulo','MM-DD')) is_work_anniversary,CASE WHEN hire_date IS NULL THEN 0 ELSE EXTRACT(YEAR FROM age((now() AT TIME ZONE 'America/Sao_Paulo')::date,hire_date))::int END years FROM public.user_profiles WHERE active=true AND email LIKE '%@grupoabr.com.br' AND ((birth_date IS NOT NULL AND to_char(birth_date,'MM-DD')=to_char(now() AT TIME ZONE 'America/Sao_Paulo','MM-DD')) OR (hire_date IS NOT NULL AND hire_date<(now() AT TIME ZONE 'America/Sao_Paulo')::date AND to_char(hire_date,'MM-DD')=to_char(now() AT TIME ZONE 'America/Sao_Paulo','MM-DD')))`)).rows;
   const templates=(await pool.query('SELECT event_type,subject_template,headline,message_html,image_base,image_mime,photo_x_pct,photo_y_pct,photo_size_pct FROM public.celebration_email_templates WHERE template_year=$1 AND active=true',[year])).rows.reduce((all,item)=>(all[item.event_type]=item,all),{});let sent=0;
   for(const person of people)for(const type of ['birthday','work_anniversary']){

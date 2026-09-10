@@ -4,13 +4,13 @@
     "private":  true,
     "description":  "Intranet corporativa #ParceirAÇO do Grupo ABR",
     "scripts":  {
-                    "dev":  "node --watch server.js",
-                    "start":  "node server.js",
+                    "dev":  "node --watch backend/server.js",
+                    "start":  "node backend/server.js",
                     "test":  "node --test",
-                    "typecheck":  "node --check server.js \u0026\u0026 node --check public/app.js",
-                    "lint":  "node --check server.js \u0026\u0026 node --check public/app.js",
-                    "build":  "npm install --omit=dev --ignore-scripts --no-audit --no-fund \u0026\u0026 node scripts/build.js",
-                    "celebrations":  "node scripts/send-celebrations.js"
+                    "typecheck":  "node --check backend/server.js \u0026\u0026 node --check frontend/public/app.js",
+                    "lint":  "node --check backend/server.js \u0026\u0026 node --check frontend/public/app.js",
+                    "build":  "npm install --omit=dev --ignore-scripts --no-audit --no-fund \u0026\u0026 node backend/scripts/build.js",
+                    "celebrations":  "node backend/scripts/send-celebrations.js"
                 },
     "engines":  {
                     "node":  "\u003e=20"
